@@ -60,7 +60,6 @@ public class HexBoard extends View {
                 float yij;
                 if (2 * BOARD_SIZE > j + Math.abs(BOARD_SIZE - i)) { //Filtering out hexes we don't want to draw
                     yij = j * (float) m_cellHeight + Math.abs(BOARD_SIZE - i) * y_cellShift;
-
                     drawHex(i * x_cellShift, yij, 10.0f, canvas);
                 }
             }
