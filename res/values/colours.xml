@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="blue">#33B5E5</string>
+    <string name="red">#FF4444</string>
+    <string name="yellow">#FFBB33</string>
+    <string name="green">#99CC00</string>
+    <string name="purple">#AA66CC</string>
+    <string name="dark_blue">#0099CC</string>
+    <string name="dark_red">#CC0000</string>
+    <string name="dark_yellow">#FF8800</string>
+    <string name="dark_green">#669900</string>
+    <string name="dark_purple">#9933CC</string>
+    <string name="dark_grey">#111111</string>
+</resources>

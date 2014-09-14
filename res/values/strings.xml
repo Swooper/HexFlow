@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HexFlow</string>
+    <string name="button_new_game">New Game</string>
+    <string name="button_level_list">Level List</string>
+    <string name="button_options">Options</string>
+    <string name="button_resume_game">Resume Game</string>
+    <string name="text_credits">Created by Haukur Jónasson</string>
+    <string name="grey">#666666</string>
+</resources>
