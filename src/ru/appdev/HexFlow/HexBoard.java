@@ -23,6 +23,7 @@ public class HexBoard extends View {
     private Paint m_paintGrid = new Paint();
     private Paint m_paintPath = new Paint();
     private Path m_path = new Path();
+    private CellPath m_cellPath = new CellPath();
 
     public HexBoard(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
@@ -49,18 +50,18 @@ public class HexBoard extends View {
     protected void onDraw( Canvas canvas ) {
         drawHexGrid(canvas);
         m_path.reset();
-        /**if ( !m_cellPath.isEmpty() ) {
+        if ( !m_cellPath.isEmpty() ) {
             List<Coordinate> colist = m_cellPath.getCoordinates();
             Coordinate co = colist.get( 0 );
-            m_path.moveTo( colToX(co.getCol()) + m_cellWidth / 2,
-                    rowToY(co.getRow()) + m_cellHeight / 2 );
+            m_path.moveTo( (float) (colToX(co.getCol()) + m_cellWidth / 2),
+                    (float) (rowToY(co.getRow()) + m_cellHeight / 2 ));
             for ( int i=1; i<colist.size(); ++i ) {
                 co = colist.get(i);
-                m_path.lineTo( colToX(co.getCol()) + m_cellWidth / 2,
-                        rowToY(co.getRow()) + m_cellHeight / 2 );
+                m_path.lineTo( (float) (colToX(co.getCol()) + m_cellWidth / 2),
+                        (float) (rowToY(co.getRow()) + m_cellHeight / 2 ));
             }
         }
-        canvas.drawPath( m_path, m_paintPath);*/
+        canvas.drawPath( m_path, m_paintPath);
     }
 
     // Draws a whole grid of hexes, as determined by BOARD_SIZE.
@@ -89,9 +90,7 @@ public class HexBoard extends View {
     // A /   \ D
     //   \___/
     //  F    E
-    // TODO get rid of scale variable
     private void drawHex(float x, float y, Canvas canvas) {
-
         float h = (float) m_cellHeight;
         float w = (float) m_cellWidth;
         //A -> B
@@ -121,7 +120,7 @@ public class HexBoard extends View {
         return row;
     }
 
-    // TODO fix these two methods when I add the code that uses them.
+    // TODO fix these two methods
     private int colToX( int col ) {
         return (int) (col * m_cellWidth);
     }
@@ -133,6 +132,42 @@ public class HexBoard extends View {
         m_paintPath.setColor( color );
         invalidate();
     }
+
+    // TODO fix this
+    private boolean areNeighbours( int c1, int r1, int c2, int r2 ) {
+        return Math.abs(c1-c2) + Math.abs(r1-r2) == 1;
+    }
+
+    // TODO fix this
+    @Override
+    public boolean onTouchEvent( MotionEvent event ) {
+        int x = (int) event.getX(); // NOTE: event.getHistorical... might be needed.
+        int y = (int) event.getY();
+        int c = xToCol( x );
+        int r = yToRow( y, x );
+        if ( c >= BOARD_SIZE || r >= BOARD_SIZE ) {
+            return true;
+        }
+        if ( event.getAction() == MotionEvent.ACTION_DOWN ) {
+            //m_path.reset();
+            //m_path.moveTo( colToX(c) + m_cellWidth / 2, rowToY(r) + m_cellHeight / 2 );
+            m_cellPath.reset();
+            m_cellPath.append( new Coordinate(c,r) );
+        }
+        else if ( event.getAction() == MotionEvent.ACTION_MOVE ) {
+            //m_path.lineTo( colToX(c) + m_cellWidth / 2, rowToY(r) + m_cellHeight / 2 );
+            if ( !m_cellPath.isEmpty() ) {
+                List<Coordinate> coordinateList = m_cellPath.getCoordinates();
+                Coordinate last = coordinateList.get(coordinateList.size()-1);
+                if ( areNeighbours(last.getCol(),last.getRow(), c, r)) {
+                    m_cellPath.append(new Coordinate(c, r));
+                    invalidate();
+                }
+            }
+        }
+        return true;
+    }
+
     /**
     @Override
     protected void onSizeChanged( int xNew, int yNew, int xOld, int yOld ) {
