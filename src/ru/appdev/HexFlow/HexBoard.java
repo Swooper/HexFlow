@@ -54,11 +54,11 @@ public class HexBoard extends View {
             List<Coordinate> colist = m_cellPath.getCoordinates();
             Coordinate co = colist.get( 0 );
             m_path.moveTo( (float) (colToX(co.getCol()) + m_cellWidth / 2),
-                    (float) (rowToY(co.getRow()) + m_cellHeight / 2 ));
+                    (float) (rowToY(co.getRow(), co.getCol()) + m_cellHeight / 2 ));
             for ( int i=1; i<colist.size(); ++i ) {
                 co = colist.get(i);
                 m_path.lineTo( (float) (colToX(co.getCol()) + m_cellWidth / 2),
-                        (float) (rowToY(co.getRow()) + m_cellHeight / 2 ));
+                        (float) (rowToY(co.getRow(), co.getCol()) + m_cellHeight / 2 ));
             }
         }
         canvas.drawPath( m_path, m_paintPath);
@@ -120,12 +120,13 @@ public class HexBoard extends View {
         return row;
     }
 
-    // TODO fix these two methods
     private int colToX( int col ) {
-        return (int) (col * m_cellWidth);
+        return (int) ((((col - 1) * m_cellWidth * 3) / 4) + (m_cellWidth / 4));
     }
-    private int rowToY( int row ) {
-        return (int) (row * m_cellHeight);
+
+    // This method has to account for the y-offset of each row.
+    private int rowToY( int row, int col ) {
+        return (int) (row * m_cellHeight + (Math.abs(BOARD_SIZE - col) * (m_cellHeight/2)));
     }
 
     public void setColor( int color ) {
@@ -133,9 +134,10 @@ public class HexBoard extends View {
         invalidate();
     }
 
-    // TODO fix this
+    // (c1, r1) must always be the origin point, (c2, r2) the destination.
     private boolean areNeighbours( int c1, int r1, int c2, int r2 ) {
-        return Math.abs(c1-c2) + Math.abs(r1-r2) == 1;
+        return ((Math.abs(c1-c2) + Math.abs(r1-r2) == 1) ||
+                (Math.abs(c1-c2) == 1 && r1-r2 == 1 ));
     }
 
     // TODO fix this
@@ -149,13 +151,13 @@ public class HexBoard extends View {
             return true;
         }
         if ( event.getAction() == MotionEvent.ACTION_DOWN ) {
-            //m_path.reset();
-            //m_path.moveTo( colToX(c) + m_cellWidth / 2, rowToY(r) + m_cellHeight / 2 );
+            m_path.reset();
+            m_path.moveTo((float) (colToX(c) + m_cellWidth / 2), (float) (rowToY(r, c) + m_cellHeight / 2 ));
             m_cellPath.reset();
             m_cellPath.append( new Coordinate(c,r) );
         }
         else if ( event.getAction() == MotionEvent.ACTION_MOVE ) {
-            //m_path.lineTo( colToX(c) + m_cellWidth / 2, rowToY(r) + m_cellHeight / 2 );
+            m_path.lineTo((float) (colToX(c) + m_cellWidth / 2), (float) (rowToY(r, c) + m_cellHeight / 2 ));
             if ( !m_cellPath.isEmpty() ) {
                 List<Coordinate> coordinateList = m_cellPath.getCoordinates();
                 Coordinate last = coordinateList.get(coordinateList.size()-1);
