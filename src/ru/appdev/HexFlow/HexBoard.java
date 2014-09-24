@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class HexBoard extends View {
 
-    private final int BOARD_SIZE = 3;
+    private final int BOARD_SIZE = 5;
     private int m_cellWidth;
     private int m_cellHeight;
     private int m_xCellShift;
@@ -78,7 +78,6 @@ public class HexBoard extends View {
                 }
             }
         }
-
     }
 
     // Draws a single hex.
@@ -161,25 +160,24 @@ public class HexBoard extends View {
     // TODO fix this
     @Override
     public boolean onTouchEvent( MotionEvent event ) {
-        int x = (int) event.getX(); // NOTE: event.getHistorical... might be needed.
+        int x = (int) event.getX();
         int y = (int) event.getY();
         int c = xToCol( x );
         int r = yToRow( y, x );
-        //System.out.println("Col: " + c + ", Row: " + r);
         if(r==0 || c==0) {
             return false;
         }
-        if ( c >= BOARD_SIZE || r >= BOARD_SIZE ) {
+        if ( c >= BOARD_SIZE*2 || r >= (BOARD_SIZE*2-Math.abs(BOARD_SIZE-c)) ) {
             return true;
         }
         if ( event.getAction() == MotionEvent.ACTION_DOWN ) {
-            //m_path.reset();
-            //m_path.moveTo((float) (colToX(c) + m_cellWidth / 2), (float) (rowToY(r, c) + m_cellHeight / 2 ));
+            m_path.reset();
+            m_path.moveTo((float) (colToX(c) + m_cellWidth / 2), (float) (rowToY(r, c) + m_cellHeight / 2 ));
             m_cellPath.reset();
             m_cellPath.append( new Coordinate(c,r) );
         }
         else if ( event.getAction() == MotionEvent.ACTION_MOVE ) {
-            //m_path.lineTo((float) (colToX(c) + m_cellWidth / 2), (float) (rowToY(r, c) + m_cellHeight / 2 ));
+            m_path.lineTo((float) (colToX(c) + m_cellWidth / 2), (float) (rowToY(r, c) + m_cellHeight / 2 ));
             if ( !m_cellPath.isEmpty() ) {
                 List<Coordinate> coordinateList = m_cellPath.getCoordinates();
                 Coordinate last = coordinateList.get(coordinateList.size()-1);
