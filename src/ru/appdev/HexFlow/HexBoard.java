@@ -154,7 +154,7 @@ public class HexBoard extends View {
     // (c1, r1) must always be the origin point, (c2, r2) the destination.
     private boolean areNeighbours( int c1, int r1, int c2, int r2 ) {
         return ((Math.abs(c1-c2) + Math.abs(r1-r2) == 1) ||
-                (Math.abs(c1-c2) == 1 && r1-r2 == 1 ));
+                (Math.abs(c1-c2) == 1 && Math.abs(r1-r2) == 1 ));
     }
 
     // TODO fix this
