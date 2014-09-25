@@ -2,9 +2,9 @@ package ru.appdev.HexFlow;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
+//import android.content.SharedPreferences;
 import android.graphics.*;
-import android.preference.PreferenceManager;
+//import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -157,7 +157,6 @@ public class HexBoard extends View {
                 (Math.abs(c1-c2) == 1 && Math.abs(r1-r2) == 1 ));
     }
 
-    // TODO fix this
     @Override
     public boolean onTouchEvent( MotionEvent event ) {
         int x = (int) event.getX();

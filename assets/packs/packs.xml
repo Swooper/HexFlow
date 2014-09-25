@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<packs>
+    <pack id="1">
+        <name>Regular Pack</name>
+        <description>Size 3 through 5</description>
+        <file>packs/regular.xml</file>
+    </pack>
+</packs>
